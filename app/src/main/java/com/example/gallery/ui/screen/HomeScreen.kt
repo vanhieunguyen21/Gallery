@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import com.example.gallery.R
 import com.example.gallery.ui.component.BucketItem
 import com.example.gallery.ui.component.SimpleTopAppBar
+import com.example.gallery.ui.component.SortBar
 import com.example.gallery.ui.navigation.Screen
 
 @Composable

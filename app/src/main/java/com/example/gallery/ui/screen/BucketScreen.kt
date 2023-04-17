@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -25,7 +27,10 @@ import com.example.gallery.model.Image
 import com.example.gallery.model.Video
 import com.example.gallery.ui.component.ImageItem
 import com.example.gallery.ui.component.SimpleTopAppBar
+import com.example.gallery.ui.component.SortBar
 import com.example.gallery.ui.component.VideoItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -33,6 +38,9 @@ fun BucketScreen(
     navController: NavController,
     viewModel: BucketViewModel = hiltViewModel()
 ) {
+    val gridState = rememberLazyGridState()
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,8 +59,29 @@ fun BucketScreen(
             },
         )
 
+        SortBar(
+            sortType = viewModel.sortType,
+            sortOrder = viewModel.sortOrder,
+            onSortTypeChange = {
+                viewModel.onSortTypeChange(it, onChanged = {
+                    coroutineScope.launch {
+                        gridState.scrollToItem(0)
+                    }
+                })
+
+            },
+            onSortOrderChange = {
+                viewModel.onSortOrderChange(it, onChanged = {
+                    coroutineScope.launch {
+                        gridState.scrollToItem(0)
+                    }
+                })
+            },
+        )
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
+            state = gridState,
             modifier = Modifier
                 .background(MaterialTheme.colors.surface)
                 .fillMaxSize(),

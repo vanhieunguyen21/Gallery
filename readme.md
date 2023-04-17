@@ -1,6 +1,7 @@
 ## Features of the app
 
 - Show all images and videos (media) organized by buckets
+- Sort media in buckets by name, last modified or size
 - Favorite media
   - Favorite media will be on top the list
   - Long click on media to set favorite or remove favorite
